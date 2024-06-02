@@ -36,5 +36,25 @@ namespace WTU {
 		int UartInit();
 		int GetAndCheck();
 	};
+
+	class custom_Wt61cUart {
+	public:
+		int baudrate_,index_;
+		std::string com_;
+		serial::Serial ser;
+		
+		double g_;
+		std::vector<uint8_t> UartData_;
+		
+		std::string topic_pub_;
+		ros::Publisher wt61c_pub_;
+		// ros::Publisher wt61c_turtle_;
+	
+		custom_Wt61cUart(ros::NodeHandle&,int,int,std::string,std::string);
+		~custom_Wt61cUart();
+		int TranslateAndPub();
+		int UartInit();
+		int GetAndCheck();
+	};
 }
 #endif

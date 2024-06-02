@@ -136,8 +136,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/wt61c_uart_node.cpp)
 add_executable(shaketest_node
-src/wt61c_uart_node_0.cpp
-src/wt61c_uart_0.cpp
+src/wt61c_uart_node_custom.cpp
+src/wt61c_uart_custom.cpp
 )
 
 
