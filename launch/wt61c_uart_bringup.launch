@@ -1,0 +1,34 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<launch>
+	<param name = "topic_pub_0" type = "string" value = "orientation_acceleration_0"/>
+	<!--  wt61c uart node  -->
+	<node pkg = "wt61c_uart" type = "wt61c_uart_node_0" name = "sensor_uart_0" output = "screen">
+		<param name = "uart_baudrate" type = "int" value = "115200"/>
+		<param name = "g" type = "double" value = "9.8"/>
+		<param name = "uart_com" type = "string" value = "/dev/wt61c_link0"/>
+	</node>
+
+	<param name = "topic_pub_1" type = "string" value = "orientation_acceleration_1"/>
+	<!--  wt61c uart node  -->
+	<node pkg = "wt61c_uart" type = "wt61c_uart_node_1" name = "sensor_uart_1" output = "screen">
+		<param name = "uart_baudrate" type = "int" value = "115200"/>
+		<param name = "g" type = "double" value = "9.8"/>
+		<param name = "uart_com" type = "string" value = "/dev/wt61c_link1"/>
+	</node>
+
+	<param name = "topic_pub_2" type = "string" value = "orientation_acceleration_2"/>
+	<!--  wt61c uart node  -->
+	<node pkg = "wt61c_uart" type = "wt61c_uart_node_2" name = "sensor_uart_2" output = "screen">
+		<param name = "uart_baudrate" type = "int" value = "115200"/>
+		<param name = "g" type = "double" value = "9.8"/>
+		<param name = "uart_com" type = "string" value = "/dev/wt61c_link2"/>
+	</node>
+
+	<param name = "topic_pub_3" type = "string" value = "orientation_acceleration_3"/>
+	<!--  wt61c uart node  -->
+	<node pkg = "wt61c_uart" type = "wt61c_uart_node_3" name = "sensor_uart_3" output = "screen">
+		<param name = "uart_baudrate" type = "int" value = "115200"/>
+		<param name = "g" type = "double" value = "9.8"/>
+		<param name = "uart_com" type = "string" value = "/dev/wt61c_link3"/>
+	</node>
+</launch>
