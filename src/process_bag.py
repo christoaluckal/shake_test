@@ -5,6 +5,7 @@ from sensor_msgs.msg import Imu
 import pickle
 import time
 from itertools import product
+import os
 
 SEQ = 0
 T = 1
@@ -37,6 +38,9 @@ def getData(bag_loc="",pkl_name="test",count=5):
             message_dict[f'imu{i}'].append(row)
 
     bag.close()
+
+    for k,v in message_dict.items():
+        print(pkl_name,k,len(v))
 
     with open(f"{pkl_name}.pkl","wb") as f:
         pickle.dump(message_dict,f)
@@ -162,9 +166,22 @@ def computeRotationOffset(pkl_loc=""):
         min_d = np.argmin(deviations)
 
         print(im,angles[min_d])
-    
 
-computeRotationOffset('ambient.pkl')
+def processFolder(folder_loc="",prefix="test"):
+    bags = os.listdir(folder_loc)
+    bags = [f for f in bags if f.endswith(".bag")]
+    names = []
+    for b in bags:
+        name = b.split("_")
+        name = "_".join(name[:-1])
+        name = prefix+"_"+name
+        bag_loc = os.path.join(folder_loc,b)
+        getData(bag_loc=bag_loc,pkl_name=name,count=10)
+    
+# processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_4","jun4")
+# processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_6","jun6")
+# processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_7/bags","jun7")
+# computeRotationOffset('ambient.pkl')
 
 # getData(bag_loc="/home/caluckal/Developer/summer2024/shake_data/shake_imu_ambient_2024-06-04-12-29-31.bag",pkl_name="ambient")
 # readData("ambient.pkl")
