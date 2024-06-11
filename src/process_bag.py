@@ -45,7 +45,7 @@ def getData(bag_loc="",pkl_name="test",count=5):
     with open(f"{pkl_name}.pkl","wb") as f:
         pickle.dump(message_dict,f)
 
-def readData(pkl_loc="",skip=20):
+def readData(pkl_loc="",skip=1):
     print(pkl_loc)
     with open(pkl_loc,"rb") as f:
         data = pickle.load(f)
@@ -62,21 +62,23 @@ def readData(pkl_loc="",skip=20):
     az = vals[:,8]
 
     seqs = seqs[::skip]
+    time_stamps = vals[:,1]-vals[0,1]
+    time_stamps = time_stamps[::skip]
     ax = ax[::skip]
     ay = ay[::skip]
     az = az[::skip]
 
 
-    # fig,axs = plt.subplots(3,1,figsize=(15,10))
+    fig,axs = plt.subplots(3,1,figsize=(15,10))
 
-    # axs[0].plot(seqs,ax,label="AX")
-    # axs[1].plot(seqs,ay,label="AY")
-    # axs[2].plot(seqs,az,label="AZ")
+    axs[0].plot(time_stamps,ax,label="AX")
+    axs[1].plot(time_stamps,ay,label="AY")
+    axs[2].plot(time_stamps,az,label="AZ")
 
-    # axs[0].legend()
-    # axs[1].legend()
-    # axs[2].legend()
-    # plt.show()
+    axs[0].legend()
+    axs[1].legend()
+    axs[2].legend()
+    plt.show()
 
     return seqs,ax,ay,az
 
@@ -178,6 +180,8 @@ def processFolder(folder_loc="",prefix="test"):
         bag_loc = os.path.join(folder_loc,b)
         getData(bag_loc=bag_loc,pkl_name=name,count=10)
     
+readData("/home/caluckal/Developer/summer2024/ros_ws/src/shake_test/src/day_3/imu/jun7_shake_white_6.pkl")
+
 # processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_4","jun4")
 # processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_6","jun6")
 # processFolder("/home/caluckal/Developer/summer2024/shake_data/shake_Jun_7/bags","jun7")

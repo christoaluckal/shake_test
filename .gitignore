@@ -2,6 +2,7 @@
 *.d
 *.pkl
 *.zip
+*.avi
 
 # Compiled Object files
 *.slo
