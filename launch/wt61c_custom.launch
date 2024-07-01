@@ -1,5 +1,0 @@
-<?xml version = "1.0" encoding = "UTF-8"?>
-<launch>
-	<node pkg = "shake_test" type = "shaketest_node" name = "shaketest_node_str" output = "screen">
-	</node>
-</launch>

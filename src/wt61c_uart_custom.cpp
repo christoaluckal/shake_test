@@ -1,6 +1,7 @@
 #include "wt61c_uart.h"
 
-WTU::custom_Wt61cUart::custom_Wt61cUart( ros::NodeHandle& nh, int bd, int index, std::string com, std::string topic_pub){
+WTU::custom_Wt61cUart::custom_Wt61cUart(int bd, int index, std::string com, std::string topic_pub) 
+{
 //Get parameter from parameter service and initialize the other parameter.
 	// nh.getParamCached("/sensor_uart_0/uart_com", com_);
 	// nh.getParamCached("/sensor_uart_0/uart_baudrate",baudrate_);
@@ -14,7 +15,8 @@ WTU::custom_Wt61cUart::custom_Wt61cUart( ros::NodeHandle& nh, int bd, int index,
 	this->topic_pub_ = topic_pub;
 
 	//delcare the pub object
-	this->wt61c_pub_ = nh.advertise<sensor_msgs::Imu>(this->topic_pub_, 1);
+	// this->wt61c_pub_ = nh.advertise<sensor_msgs::Imu>(this->topic_pub_, 1);
+	// this->wt61c_pub_ = this->create_publisher<sensor_msgs::msg::Imu>(this->topic_pub_, 1);
 	// wt61c_turtle_ = nh.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 }
 //
@@ -35,13 +37,15 @@ int WTU::custom_Wt61cUart::UartInit() {
 		ser.open();                           // try to open the port
 	}
 	catch(serial::IOException& e){
-		ROS_ERROR_STREAM("Unable to open port. Please try again.");
+		// ROS_ERROR_STREAM("Unable to open port. Please try again.");
+		std::cout << "Unable to open port. Please try again." << std::endl;
 		return 1;
 	}
 	//Detects if the port is open
 	if(ser.isOpen()) {
 		//ser.flushInput();
-		ROS_INFO_STREAM("The port initialize succeed.");
+		// ROS_INFO_STREAM("The port initialize succeed.");
+		std::cout << "The port initialize succeed." << std::endl;
 		ser.flushInput();
 		sleep(0.1);
 		return 0;
@@ -59,7 +63,10 @@ int WTU::custom_Wt61cUart::GetAndCheck() {
 	int sum = 0x55;
 
 	while(UartData_.size()-index_<33) {
-		while(ser.available()<33){ROS_INFO("wait");}
+		while(ser.available()<33){
+			// ROS_INFO("wait");
+			RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "wait");
+			}
 		ser.read(UartData_,ser.available());
 	}
 	while(true) {
@@ -80,7 +87,8 @@ int WTU::custom_Wt61cUart::GetAndCheck() {
 			if(UartData_[index_+32] == sum%0x100)
 				j++;
 			if (j = 3) {
-				ROS_INFO("Yes,I got a complete package.");
+				// ROS_INFO("Yes,I got a complete package.");
+				std::cout << "Yes,I got a complete package." << std::endl;
 				return 0;
 			}
 			else {
@@ -99,13 +107,14 @@ int WTU::custom_Wt61cUart::GetAndCheck() {
 
 // translate UartDate to Imu date,and pub
 int WTU::custom_Wt61cUart::TranslateAndPub() {
-	sensor_msgs::Imu wt61c_imu;                //declare the pub message
+	// sensor_msgs::Imu wt61c_imu;                //declare the pub message
+	sensor_msgs::msg::Imu wt61c_imu;
 	// geometry_msgs::Twist turtle;
 	double linear_acceleration[2],angular_velocity[2],orientation[2];
 
-	wt61c_imu.header.stamp = ros::Time::now();
+	wt61c_imu.header.stamp = rclcpp::Clock(RCL_ROS_TIME).now();
 	wt61c_imu.header.frame_id = "wt61c_uart";
-	tf::Quaternion quate;
+	tf2::Quaternion quate;
 
 	linear_acceleration[0] = ( short (UartData_[index_+ 3]<< 8 | UartData_[index_+ 2]))/ 32768.0* 16.0* 9.8;
 	linear_acceleration[1] = ( short (UartData_[index_+ 5]<< 8 | UartData_[index_+ 4]))/ 32768.0* 16.0* 9.8;
@@ -152,7 +161,8 @@ int WTU::custom_Wt61cUart::TranslateAndPub() {
 	index_ =index_+ 32;
 	UartData_.erase(UartData_.begin(),UartData_.begin()+index_);
 	index_ = 0;
-	ROS_INFO("The data has been pub.");	
+	// ROS_INFO("The data has been pub.");	
+	std::cout << "The data has been pub." << std::endl;
 	// wt61c_turtle_.publish(turtle);
 
 	return 0;
