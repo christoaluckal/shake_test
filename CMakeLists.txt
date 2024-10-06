@@ -21,7 +21,7 @@ find_package(tf2_ros REQUIRED)
 include_directories(include/wt61c)
 
 # add_executable(wt61c src/wt61c_uart_custom.cpp src/wt61c_uart_node_custom.cpp)
-add_executable(wt61c src/wt61c_uart_node_custom.cpp)
+add_executable(wt61c src/wt61c_uart_node_custom.cpp src/wt61c_uart_custom.cpp)
 ament_target_dependencies(wt61c rclcpp sensor_msgs std_msgs serial tf2 tf2_ros)
 
 install(TARGETS

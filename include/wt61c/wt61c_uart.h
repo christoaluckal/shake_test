@@ -5,14 +5,6 @@
 #include <math.h>
 #include <time.h>
 
-// #include "ros/ros.h"
-// #include "serial/serial.h"
-// #include "std_msgs/String.h"
-// #include "std_msgs/Empty.h"
-// #include "sensor_msgs/Imu.h"
-// // #include "geometry_msgs/Twist.h"
-// #include "tf/LinearMath/Quaternion.h"
-
 #include "rclcpp/rclcpp.hpp"
 #include "serial/serial.h"
 #include "std_msgs/msg/string.hpp"
@@ -46,7 +38,8 @@ namespace WTU {
 		int GetAndCheck();
 	};
 
-	class custom_Wt61cUart{
+	class custom_Wt61cUart : public rclcpp::Node
+	{
 	public:
 		int baudrate_,index_;
 		std::string com_;

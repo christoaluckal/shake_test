@@ -1,23 +1,14 @@
 #include "wt61c_uart.h"
 
-WTU::custom_Wt61cUart::custom_Wt61cUart(int bd, int index, std::string com, std::string topic_pub) 
+WTU::custom_Wt61cUart::custom_Wt61cUart(int bd, int index, std::string com, std::string topic_pub) : rclcpp::Node("wt61c_uart")
 {
-//Get parameter from parameter service and initialize the other parameter.
-	// nh.getParamCached("/sensor_uart_0/uart_com", com_);
-	// nh.getParamCached("/sensor_uart_0/uart_baudrate",baudrate_);
-	// nh.getParamCached("/sensor_uart_0/g", g_);
-	// nh.getParamCached("topic_pub_0", topic_pub_);
-	// index_ = 0;
-
 	this->baudrate_ = bd;
 	this->index_ = index;
 	this->com_ = com;
 	this->topic_pub_ = topic_pub;
-
+	// this->node_name = "wt61c_uart";
 	//delcare the pub object
-	// this->wt61c_pub_ = nh.advertise<sensor_msgs::Imu>(this->topic_pub_, 1);
-	// this->wt61c_pub_ = this->create_publisher<sensor_msgs::msg::Imu>(this->topic_pub_, 1);
-	// wt61c_turtle_ = nh.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
+	wt61c_pub_ = this->create_publisher<sensor_msgs::msg::Imu>(this->topic_pub_, 1);
 }
 //
 WTU::custom_Wt61cUart::~custom_Wt61cUart(){
@@ -154,8 +145,7 @@ int WTU::custom_Wt61cUart::TranslateAndPub() {
 	// ROS_INFO("wt61c_imu.orientation.y = %f", wt61c_imu.orientation.y);
 	// ROS_INFO("wt61c_imu.orientation.z = %f", wt61c_imu.orientation.z);
 	// ROS_INFO("wt61c_imu.orientation.w = %f", wt61c_imu.orientation.w);
-
-	wt61c_pub_.publish(wt61c_imu);
+	wt61c_pub_->publish(wt61c_imu);
 	
 	//delate the old date	
 	index_ =index_+ 32;
